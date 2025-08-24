@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar System Escape - 太陽系脱出計画</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="game-container">
+        <!-- ヘッダー -->
+        <header id="game-header">
+            <h1 id="game-title">Solar System Escape</h1>
+            <div id="resource-display">
+                <div class="resource-item">
+                    <span class="resource-icon">⛰️</span>
+                    <span class="resource-label">鉱物</span>
+                    <span class="resource-value" id="minerals">0</span>
+                </div>
+                <div class="resource-item">
+                    <span class="resource-icon">⚡</span>
+                    <span class="resource-label">エネルギー</span>
+                    <span class="resource-value" id="energy">0</span>
+                </div>
+                <div class="resource-item">
+                    <span class="resource-icon">🔬</span>
+                    <span class="resource-label">科学データ</span>
+                    <span class="resource-value" id="science">0</span>
+                </div>
+                <div class="resource-item">
+                    <span class="resource-icon">💎</span>
+                    <span class="resource-label">レアメタル</span>
+                    <span class="resource-value" id="rare-metals">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- メインゲーム画面 -->
+        <main id="game-main">
+            <!-- 惑星ビューエリア -->
+            <section id="planet-view">
+                <div id="planet-info">
+                    <h2 id="planet-name">水星</h2>
+                    <div id="planet-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="exploration-progress"></div>
+                        </div>
+                        <span id="progress-text">探索進行度: 0%</span>
+                    </div>
+                </div>
+                
+                <div id="planet-display">
+                    <div id="planet-image" class="planet mercury">
+                        <div id="click-area"></div>
+                    </div>
+                </div>
+
+                <div id="planet-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">特殊資源:</span>
+                        <span class="stat-value" id="special-resource">耐熱金属</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">探索レベル:</span>
+                        <span class="stat-value" id="exploration-level">1</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- サイドメニュー -->
+            <aside id="side-menu">
+                <nav id="menu-tabs">
+                    <button class="tab-button active" data-tab="upgrades">アップグレード</button>
+                    <button class="tab-button" data-tab="research">技術研究</button>
+                    <button class="tab-button" data-tab="planets">惑星選択</button>
+                    <button class="tab-button" data-tab="stats">統計</button>
+                </nav>
+
+                <!-- アップグレードタブ -->
+                <div id="upgrades-tab" class="tab-content active">
+                    <h3>装備・施設強化</h3>
+                    <div class="upgrade-category">
+                        <h4>採掘装備</h4>
+                        <div class="upgrade-item">
+                            <div class="upgrade-info">
+                                <span class="upgrade-name">基本採掘機</span>
+                                <span class="upgrade-level">Lv.<span id="mining-level">1</span></span>
+                            </div>
+                            <div class="upgrade-cost">
+                                <span class="cost-minerals">10</span> 鉱物
+                            </div>
+                            <button class="upgrade-button" id="upgrade-mining">強化</button>
+                        </div>
+                        <div class="upgrade-item">
+                            <div class="upgrade-info">
+                                <span class="upgrade-name">自動採掘</span>
+                                <span class="upgrade-level">Lv.<span id="auto-mining-level">0</span></span>
+                            </div>
+                            <div class="upgrade-cost">
+                                <span class="cost-energy">50</span> エネルギー
+                            </div>
+                            <button class="upgrade-button" id="upgrade-auto-mining">強化</button>
+                        </div>
+                    </div>
+                    
+                    <div class="upgrade-category">
+                        <h4>宇宙船性能</h4>
+                        <div class="upgrade-item">
+                            <div class="upgrade-info">
+                                <span class="upgrade-name">推進システム</span>
+                                <span class="upgrade-level">Lv.<span id="propulsion-level">1</span></span>
+                            </div>
+                            <div class="upgrade-cost">
+                                <span class="cost-energy">100</span> エネルギー
+                            </div>
+                            <button class="upgrade-button" id="upgrade-propulsion">強化</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 技術研究タブ -->
+                <div id="research-tab" class="tab-content">
+                    <h3>技術開発</h3>
+                    <div class="research-item available">
+                        <div class="research-info">
+                            <span class="research-name">効率採掘技術</span>
+                            <div class="research-progress">
+                                <div class="progress-bar small">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                                <span class="progress-text">未開始</span>
+                            </div>
+                        </div>
+                        <div class="research-cost">
+                            <span class="cost-science">100</span> 科学データ
+                        </div>
+                        <button class="research-button">研究開始</button>
+                    </div>
+                </div>
+
+                <!-- 惑星選択タブ -->
+                <div id="planets-tab" class="tab-content">
+                    <h3>惑星一覧</h3>
+                    <div class="planet-list">
+                        <div class="planet-item unlocked active" data-planet="mercury">
+                            <span class="planet-emoji">☿️</span>
+                            <div class="planet-details">
+                                <span class="planet-name">水星</span>
+                                <span class="planet-status">探索中</span>
+                            </div>
+                        </div>
+                        <div class="planet-item locked" data-planet="venus">
+                            <span class="planet-emoji">♀️</span>
+                            <div class="planet-details">
+                                <span class="planet-name">金星</span>
+                                <span class="planet-status">未解放</span>
+                            </div>
+                        </div>
+                        <div class="planet-item locked" data-planet="earth">
+                            <span class="planet-emoji">🌍</span>
+                            <div class="planet-details">
+                                <span class="planet-name">地球</span>
+                                <span class="planet-status">未解放</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 統計タブ -->
+                <div id="stats-tab" class="tab-content">
+                    <h3>プレイ統計</h3>
+                    <div class="stat-display">
+                        <div class="stat-row">
+                            <span class="stat-label">総プレイ時間:</span>
+                            <span class="stat-value" id="total-playtime">0分</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">総クリック数:</span>
+                            <span class="stat-value" id="total-clicks">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">採掘した鉱物:</span>
+                            <span class="stat-value" id="total-minerals-mined">0</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- フッター -->
+        <footer id="game-footer">
+            <div id="auto-progress">
+                <span>自動採掘: <span id="auto-mining-rate">0</span>/秒</span>
+            </div>
+            <div id="save-controls">
+                <button id="save-game">セーブ</button>
+                <button id="load-game">ロード</button>
+                <button id="export-save">エクスポート</button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 通知システム -->
+    <div id="notification-container"></div>
+
+    <!-- モーダルダイアログ -->
+    <div id="modal-overlay" class="hidden">
+        <div id="modal-content">
+            <h3 id="modal-title"></h3>
+            <p id="modal-message"></p>
+            <div id="modal-buttons">
+                <button id="modal-confirm">OK</button>
+                <button id="modal-cancel">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/game.js"></script>
+</body>
+</html>
